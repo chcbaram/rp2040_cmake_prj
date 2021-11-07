@@ -8,7 +8,7 @@
 bool bspInit(void)
 {
   // overclock the rp2040 to 250mhz
-  set_sys_clock_khz(250000, true);
+  //set_sys_clock_khz(250000, true);
 
   stdio_init_all();
   
