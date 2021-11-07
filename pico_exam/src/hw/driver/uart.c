@@ -134,7 +134,6 @@ uint32_t uartWrite(uint8_t ch, uint8_t *p_data, uint32_t length)
   {
     case _DEF_UART1:
       //ret = (uint32_t)uwrite(uart_tbl[ch].p_huart, (void *)p_data, (int)length);
-      //stdio_usb_out_chars(p_data, length);
       stdio_usb.out_chars((char *)p_data, length);
       break;
   }
