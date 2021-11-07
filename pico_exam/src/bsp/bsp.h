@@ -25,8 +25,8 @@ void delay(uint32_t time_ms);
 uint32_t millis(void);
 
 
-//void logPrintf(const char *fmt, ...);
-#define logPrintf printf
+void logPrintf(const char *fmt, ...);
+
 
 #ifdef __cplusplus
  }

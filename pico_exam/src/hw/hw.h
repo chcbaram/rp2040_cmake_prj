@@ -19,7 +19,7 @@
 #include "led.h"
 #include "uart.h"
 #include "cli.h"
-
+#include "log.h"
 
 bool hwInit(void);
 
