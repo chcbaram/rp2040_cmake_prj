@@ -20,6 +20,10 @@
 #include "uart.h"
 #include "cli.h"
 #include "log.h"
+#include "gpio.h"
+#include "spi.h"
+#include "can.h"
+
 
 bool hwInit(void);
 

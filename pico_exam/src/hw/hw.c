@@ -18,9 +18,12 @@ bool hwInit(void)
   cliInit();
   logInit();
   ledInit();
+  gpioInit();
+  spiInit();
   uartInit();
   uartOpen(_DEF_UART1, 57600);
-
+  logOpen(_DEF_UART1, 57600);
+  
   logPrintf("[ Firmware Begin... ]\r\n");
   logPrintf("Booting..Name \t\t: %s\r\n", _DEF_BOARD_NAME);
   logPrintf("Booting..Ver  \t\t: %s\r\n", _DEF_FIRMWATRE_VERSION);
@@ -30,7 +33,8 @@ bool hwInit(void)
   logPrintf("Clk adc  \t\t: %d\r\n", clock_get_hz(clk_adc));
   logPrintf("Clk rtc  \t\t: %d\r\n", clock_get_hz(clk_rtc));
   logPrintf("Clk timer\t\t: %d\r\n", clock_get_hz(clk_ref));
-
+  
+  canInit();
 
   logBoot(false);
 

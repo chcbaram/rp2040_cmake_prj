@@ -11,6 +11,10 @@ add_executable(
   hw/driver/uart.c
   hw/driver/cli.c
   hw/driver/log.c
+  hw/driver/gpio.c
+  hw/driver/spi.c
+  hw/driver/mcp2515.c
+  hw/driver/can.c
 )
 
 target_include_directories(${PRJ_NAME} PUBLIC 
@@ -22,7 +26,10 @@ target_include_directories(${PRJ_NAME} PUBLIC
   hw
 )
 
-target_link_libraries(${PRJ_NAME} pico_stdlib)
+target_link_libraries(${PRJ_NAME} 
+  pico_stdlib
+  hardware_spi
+  )
 
 pico_add_extra_outputs(${PRJ_NAME})
 pico_enable_stdio_usb(${PRJ_NAME}  1)

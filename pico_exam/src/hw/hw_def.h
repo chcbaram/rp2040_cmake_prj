@@ -18,6 +18,12 @@
 #define _USE_HW_UART
 #define      HW_UART_MAX_CH         1
 
+#define _USE_HW_GPIO
+#define      HW_GPIO_MAX_CH         2
+
+#define _USE_HW_SPI
+#define      HW_SPI_MAX_CH          1
+
 #define _USE_HW_CLI
 #define      HW_CLI_CMD_LIST_MAX    16
 #define      HW_CLI_CMD_NAME_MAX    16
@@ -29,5 +35,11 @@
 #define      HW_LOG_BOOT_BUF_MAX    1024
 #define      HW_LOG_LIST_BUF_MAX    1024
 
+#define _USE_HW_MCP2515
+#define      HW_MCP2515_MAX_CH      1
+
+#define _USE_HW_CAN
+#define      HW_CAN_MAX_CH          1
+#define      HW_CAN_MSG_RX_BUF_MAX  16
 
 #endif /* SRC_HW_HW_DEF_H_ */
