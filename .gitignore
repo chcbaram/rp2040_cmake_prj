@@ -39,4 +39,5 @@ _deps
 !.vscode/*.code-snippets
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,cmake
-pico_exam/build/
+pico_can/build/
+pico_lcd/build/
