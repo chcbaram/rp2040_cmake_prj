@@ -231,7 +231,7 @@ bool __not_in_flash_func(spiTransfer)(uint8_t ch, uint8_t *tx_buf, uint8_t *rx_b
   uint32_t rx_i = 0;
 
   if (p_spi->is_open == false) return false;
-  
+
 
   const size_t fifo_depth = 8;
   size_t rx_remaining = length;
@@ -331,11 +331,6 @@ bool spiDmaTxIsDone(uint8_t ch)
   spi_t  *p_spi = &spi_tbl[ch];
 
   if (p_spi->is_open == false)     return true;
-
-  if (!dma_channel_is_busy(p_spi->dma_tx) && !spi_is_busy(p_spi->h_spi))
-  {
-    p_spi->is_tx_done = true;
-  }
 
   return p_spi->is_tx_done;
 }

@@ -45,6 +45,21 @@ static uint16_t ili9341GetWidth(void);
 static uint16_t ili9341GetHeight(void);
 
 
+static void transferDoneISR(void)
+{
+  if (is_write_frame == true)
+  {
+    is_write_frame = false;
+    gpioPinWrite(_PIN_DEF_CS, _DEF_HIGH);
+
+    if (frameCallBack != NULL)
+    {
+      frameCallBack();
+    }
+  }
+}
+
+
 
 bool ili9341Init(void)
 {
@@ -74,6 +89,8 @@ bool ili9341Reset(void)
   spiBegin(spi_ch);
   spiSetDataMode(spi_ch, SPI_MODE0);
   spiSetBaudRate(spi_ch, 500*1000);
+
+  spiAttachTxInterrupt(spi_ch, transferDoneISR);
 
   gpioPinWrite(_PIN_DEF_DC,  _DEF_HIGH);
   gpioPinWrite(_PIN_DEF_CS,  _DEF_HIGH);
@@ -266,7 +283,6 @@ void illi9341SetRotation(uint8_t m)
       //_width  = _init_height;
       //_height = _init_width;
       break;
-  // These next rotations are for bottom up BMP drawing
     case 4:
       writedata(TFT_MAD_MX | TFT_MAD_MY | TFT_MAD_MV | TFT_MAD_COLOR_ORDER);
       //_width  = _init_width;
@@ -361,30 +377,13 @@ bool ili9341SendBuffer(uint8_t *p_data, uint32_t length, uint32_t timeout_ms)
 {
   is_write_frame = true;
 
-#if 0
   spiSetBitWidth(spi_ch, 16);
 
   gpioPinWrite(_PIN_DEF_DC, _DEF_HIGH);
   gpioPinWrite(_PIN_DEF_CS, _DEF_LOW);
 
   spiDmaTxTransfer(_DEF_SPI1, (void *)p_data, length, 0);
-#else
 
-spiSetBitWidth(spi_ch, 16);
-
-gpioPinWrite(_PIN_DEF_DC, _DEF_HIGH);
-gpioPinWrite(_PIN_DEF_CS, _DEF_LOW);
-
-//spiTransfer(spi_ch, (uint8_t *)p_data, NULL, length*2, 1000);
-spiDmaTxTransfer(spi_ch, (uint8_t *)p_data, length, 1000);
-
-gpioPinWrite(_PIN_DEF_CS, _DEF_HIGH);
-
-if (frameCallBack != NULL)
-{
-  frameCallBack();
-}
-#endif  
   return true;
 }
 
