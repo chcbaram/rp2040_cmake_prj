@@ -23,6 +23,7 @@
 #include "gpio.h"
 #include "spi.h"
 #include "can.h"
+#include "lcd.h"
 
 
 bool hwInit(void);

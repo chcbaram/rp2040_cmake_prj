@@ -10,7 +10,6 @@
 
 
 
-
 bool hwInit(void)
 {  
   bspInit();
@@ -34,8 +33,12 @@ bool hwInit(void)
   logPrintf("Clk rtc  \t\t: %d\r\n", clock_get_hz(clk_rtc));
   logPrintf("Clk timer\t\t: %d\r\n", clock_get_hz(clk_ref));
 
+  lcdInit();
+  lcdSetFps(20);
 
   logBoot(false);
+
+
 
   return true;
 }

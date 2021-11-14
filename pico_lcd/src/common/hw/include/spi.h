@@ -29,11 +29,14 @@ bool spiInit(void);
 bool spiBegin(uint8_t ch);
 void spiSetDataMode(uint8_t ch, uint8_t dataMode);
 void spiSetBitWidth(uint8_t ch, uint8_t bit_width);
+void spiSetBaudRate(uint8_t ch, uint32_t baud_rate);
+uint32_t spiGetBaudRate(uint8_t ch);
 
 bool     spiTransfer(uint8_t ch, uint8_t *tx_buf, uint8_t *rx_buf, uint32_t length, uint32_t timeout);
 uint8_t  spiTransfer8(uint8_t ch, uint8_t data);
 uint16_t spiTransfer16(uint8_t ch, uint16_t data);
 
+bool spiDmaTransfer(uint8_t ch, uint8_t *tx_buf, uint8_t *rx_buf, uint32_t length, uint32_t timeout);
 void spiDmaTxStart(uint8_t ch, uint8_t *p_buf, uint32_t length);
 bool spiDmaTxTransfer(uint8_t ch, void *buf, uint32_t length, uint32_t timeout);
 bool spiDmaTxIsDone(uint8_t ch);

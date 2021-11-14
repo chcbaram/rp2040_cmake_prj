@@ -13,6 +13,12 @@ add_executable(
   hw/driver/log.c
   hw/driver/gpio.c
   hw/driver/spi.c
+  hw/driver/lcd.c
+  hw/driver/resize.c
+
+  hw/driver/lcd/ili9341.c  
+  hw/driver/lcd/lcd_fonts.c
+  hw/driver/hangul/han.c  
 )
 
 target_include_directories(${PRJ_NAME} PUBLIC 
@@ -27,6 +33,8 @@ target_include_directories(${PRJ_NAME} PUBLIC
 target_link_libraries(${PRJ_NAME} 
   pico_stdlib
   hardware_spi
+  hardware_dma
+  hardware_irq
   )
 
 pico_add_extra_outputs(${PRJ_NAME})

@@ -19,7 +19,7 @@
 #define      HW_UART_MAX_CH         1
 
 #define _USE_HW_GPIO
-#define      HW_GPIO_MAX_CH         3
+#define      HW_GPIO_MAX_CH         5
 
 #define _USE_HW_SPI
 #define      HW_SPI_MAX_CH          1
@@ -35,6 +35,10 @@
 #define      HW_LOG_BOOT_BUF_MAX    1024
 #define      HW_LOG_LIST_BUF_MAX    1024
 
+#define _USE_HW_LCD
+#define _USE_HW_ILI9341
+#define      HW_LCD_WIDTH           320
+#define      HW_LCD_HEIGHT          240
 
 
 #endif /* SRC_HW_HW_DEF_H_ */

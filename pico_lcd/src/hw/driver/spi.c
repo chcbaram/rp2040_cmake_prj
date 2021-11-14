@@ -8,6 +8,8 @@
 
 #include "spi.h"
 #include "hardware/spi.h"
+#include "hardware/dma.h"
+#include "hardware/irq.h"
 
 
 #ifdef _USE_HW_SPI
@@ -18,6 +20,10 @@ typedef struct
   bool is_tx_done;
   bool is_error;
   uint8_t bit_width;
+  spi_cpha_t cpha;
+  spi_cpol_t cpol;
+  int dma_tx;
+  dma_channel_config dma_tx_cfg;
 
   void (*func_tx)(void);
 
@@ -29,6 +35,20 @@ typedef struct
 spi_t spi_tbl[SPI_MAX_CH];
 
 
+
+void __isr dma_complete() 
+{
+  if(dma_channel_get_irq0_status(spi_tbl[_DEF_SPI1].dma_tx)) 
+  {
+    dma_channel_acknowledge_irq0(spi_tbl[_DEF_SPI1].dma_tx); // clear irq flag
+    spi_tbl[_DEF_SPI1].is_tx_done = true;
+
+    if (spi_tbl[_DEF_SPI1].func_tx != NULL)
+    {
+      (*spi_tbl[_DEF_SPI1].func_tx)();
+    }    
+  }
+}
 
 
 bool spiInit(void)
@@ -43,6 +63,8 @@ bool spiInit(void)
     spi_tbl[i].is_error = false;
     spi_tbl[i].func_tx = NULL;
     spi_tbl[i].bit_width = 8;
+    spi_tbl[i].cpha = SPI_CPHA_0;
+    spi_tbl[i].cpol = SPI_CPOL_0;
   }
 
   return ret;
@@ -58,10 +80,27 @@ bool spiBegin(uint8_t ch)
     case _DEF_SPI1:
       p_spi->h_spi = spi1;
 
-      spi_init(p_spi->h_spi, 10*1000*1000); // 10Mhz
+      spi_init(p_spi->h_spi, 10*1000*1000); 
       gpio_set_function(10, GPIO_FUNC_SPI); // SCK
       gpio_set_function(11, GPIO_FUNC_SPI); // MOSI
-      gpio_set_function(12, GPIO_FUNC_SPI); // MISO
+      //gpio_set_function(12, GPIO_FUNC_SPI); // MISO
+      spi_set_format(p_spi->h_spi, p_spi->bit_width, p_spi->cpol, p_spi->cpha, SPI_MSB_FIRST);
+
+      gpio_set_slew_rate(10, GPIO_SLEW_RATE_FAST);
+      gpio_set_slew_rate(11, GPIO_SLEW_RATE_FAST);
+
+      // dma init
+      p_spi->dma_tx = dma_claim_unused_channel(true);;
+      p_spi->dma_tx_cfg = dma_channel_get_default_config(p_spi->dma_tx);
+
+      channel_config_set_transfer_data_size(&p_spi->dma_tx_cfg, DMA_SIZE_16);
+      channel_config_set_dreq(&p_spi->dma_tx_cfg, spi_get_index(p_spi->h_spi) ? DREQ_SPI1_TX : DREQ_SPI0_TX);
+
+      // dma done isr
+      dma_channel_set_irq0_enabled(p_spi->dma_tx, true);
+      irq_set_exclusive_handler(DMA_IRQ_0, dma_complete);
+      irq_set_enabled(DMA_IRQ_0, true);
+
 
       p_spi->is_open = true;
       ret = true;
@@ -86,20 +125,30 @@ void spiSetDataMode(uint8_t ch, uint8_t dataMode)
   {
     // CPOL=0, CPHA=0
     case SPI_MODE0:
+      p_spi->cpol = SPI_CPOL_0;
+      p_spi->cpha = SPI_CPHA_0;
       break;
 
     // CPOL=0, CPHA=1
     case SPI_MODE1:
+      p_spi->cpol = SPI_CPOL_0;
+      p_spi->cpha = SPI_CPHA_1;
       break;
 
     // CPOL=1, CPHA=0
     case SPI_MODE2:
+      p_spi->cpol = SPI_CPOL_1;
+      p_spi->cpha = SPI_CPHA_0;
       break;
 
     // CPOL=1, CPHA=1
     case SPI_MODE3:
+      p_spi->cpol = SPI_CPOL_1;
+      p_spi->cpha = SPI_CPHA_1;
       break;
   }
+
+  spi_set_format(p_spi->h_spi, p_spi->bit_width, p_spi->cpol, p_spi->cpha, SPI_MSB_FIRST);
 }
 
 void spiSetBitWidth(uint8_t ch, uint8_t bit_width)
@@ -109,7 +158,28 @@ void spiSetBitWidth(uint8_t ch, uint8_t bit_width)
   if (p_spi->is_open == false) return;
 
   p_spi->bit_width = bit_width;
+
+  spi_set_format(p_spi->h_spi, p_spi->bit_width, p_spi->cpol, p_spi->cpha, SPI_MSB_FIRST);
 }
+
+void spiSetBaudRate(uint8_t ch, uint32_t baud_rate)
+{
+  spi_t  *p_spi = &spi_tbl[ch];
+
+  if (p_spi->is_open == false) return;
+
+  spi_set_baudrate(p_spi->h_spi, baud_rate);
+}
+
+uint32_t spiGetBaudRate(uint8_t ch)
+{
+  spi_t  *p_spi = &spi_tbl[ch];
+
+  if (p_spi->is_open == false) return 0;
+
+  return spi_get_baudrate(p_spi->h_spi);
+}
+
 
 uint8_t spiTransfer8(uint8_t ch, uint8_t data)
 {
@@ -152,7 +222,7 @@ uint16_t spiTransfer16(uint8_t ch, uint16_t data)
   return ret;
 }
 
-bool spiTransfer(uint8_t ch, uint8_t *tx_buf, uint8_t *rx_buf, uint32_t length, uint32_t timeout)
+bool __not_in_flash_func(spiTransfer)(uint8_t ch, uint8_t *tx_buf, uint8_t *rx_buf, uint32_t length, uint32_t timeout)
 {
   bool ret = true;
   spi_t  *p_spi = &spi_tbl[ch];
@@ -161,6 +231,7 @@ bool spiTransfer(uint8_t ch, uint8_t *tx_buf, uint8_t *rx_buf, uint32_t length, 
   uint32_t rx_i = 0;
 
   if (p_spi->is_open == false) return false;
+  
 
   const size_t fifo_depth = 8;
   size_t rx_remaining = length;
@@ -175,7 +246,6 @@ bool spiTransfer(uint8_t ch, uint8_t *tx_buf, uint8_t *rx_buf, uint32_t length, 
         spi_get_hw(p_spi->h_spi)->dr = (uint32_t)0xFF;        
       else
         spi_get_hw(p_spi->h_spi)->dr = (uint32_t) tx_buf[tx_i];
-
       tx_i++;
       --tx_remaining;
     }
@@ -197,7 +267,20 @@ bool spiTransfer(uint8_t ch, uint8_t *tx_buf, uint8_t *rx_buf, uint32_t length, 
     }
   }
 
+  while(spi_is_busy(p_spi->h_spi))
+  {
+    if (millis()-pre_time >= timeout)
+    {
+      ret = false;
+      break;
+    }
+  }
   return ret;
+}
+
+bool spiDmaTransfer(uint8_t ch, uint8_t *tx_buf, uint8_t *rx_buf, uint32_t length, uint32_t timeout)
+{
+  return spiTransfer(ch, tx_buf, rx_buf, length, timeout);
 }
 
 void spiDmaTxStart(uint8_t spi_ch, uint8_t *p_buf, uint32_t length)
@@ -205,6 +288,12 @@ void spiDmaTxStart(uint8_t spi_ch, uint8_t *p_buf, uint32_t length)
   spi_t  *p_spi = &spi_tbl[spi_ch];
 
   if (p_spi->is_open == false) return;
+
+  dma_channel_configure(p_spi->dma_tx, &p_spi->dma_tx_cfg,
+                        &spi_get_hw(p_spi->h_spi)->dr, 
+                        p_buf,  
+                        length, 
+                        true); 
 
   p_spi->is_tx_done = false;
 }
@@ -242,6 +331,11 @@ bool spiDmaTxIsDone(uint8_t ch)
   spi_t  *p_spi = &spi_tbl[ch];
 
   if (p_spi->is_open == false)     return true;
+
+  if (!dma_channel_is_busy(p_spi->dma_tx) && !spi_is_busy(p_spi->h_spi))
+  {
+    p_spi->is_tx_done = true;
+  }
 
   return p_spi->is_tx_done;
 }
