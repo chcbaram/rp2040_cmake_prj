@@ -41,3 +41,4 @@ _deps
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,cmake
 pico_can/build/
 pico_lcd/build/
+pico_oled/build/

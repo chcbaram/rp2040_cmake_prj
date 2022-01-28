@@ -1,11 +1,9 @@
 cmake_minimum_required(VERSION 3.12)
 
-set(PRJ_NAME pico_lcd)
+set(PRJ_NAME pico_oled)
 
 set(PICO_SDK_PATH $ENV{PICO_SDK_PATH})
 set(PICOSYSTEM_DIR $ENV{PICOSYSTEM_DIR})
-set(PICO_TOOLCHAIN_PATH $ENV{PICO_TOOLCHAIN_PATH})
-
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
