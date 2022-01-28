@@ -235,26 +235,7 @@ bool i2cWriteByte (uint8_t ch, uint16_t dev_addr, uint16_t reg_addr, uint8_t dat
 bool i2cWriteBytes(uint8_t ch, uint16_t dev_addr, uint16_t reg_addr, uint8_t *p_data, uint32_t length, uint32_t timeout)
 {
   bool ret = false;
-  #if 0
-  HAL_StatusTypeDef i2c_ret;
-  I2C_HandleTypeDef *p_handle = i2c_tbl[ch].p_hi2c;
 
-  if (ch >= I2C_MAX_CH)
-  {
-    return false;
-  }
-
-  i2c_ret = HAL_I2C_Mem_Write(p_handle, (uint16_t)(dev_addr << 1), reg_addr, I2C_MEMADD_SIZE_8BIT, p_data, length, timeout);
-
-  if(i2c_ret == HAL_OK)
-  {
-    ret = true;
-  }
-  else
-  {
-    ret = false;
-  }
-  #else
   int i2c_ret;
   uint8_t tx_buf[length+1];
 
@@ -268,7 +249,7 @@ bool i2cWriteBytes(uint8_t ch, uint16_t dev_addr, uint16_t reg_addr, uint8_t *p_
   {
     ret = true;
   }
-  #endif
+
   return ret;
 }
 
