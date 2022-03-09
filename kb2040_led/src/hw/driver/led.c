@@ -8,6 +8,7 @@
 
 #include "led.h"
 
+#ifdef _USE_HW_LED
 
 typedef struct
 {
@@ -61,3 +62,5 @@ void ledToggle(uint8_t ch)
 
   gpio_xor_mask(1<<led_tbl[ch].pin);
 }
+
+#endif
