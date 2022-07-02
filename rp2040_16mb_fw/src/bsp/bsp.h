@@ -15,8 +15,11 @@
  extern "C" {
 #endif
 
+#include "RP2040.h"
 #include "hardware/clocks.h"
+#include "hardware/flash.h"
 #include "pico/stdlib.h"
+#include "pico/platform.h"
 
 
 bool bspInit(void);

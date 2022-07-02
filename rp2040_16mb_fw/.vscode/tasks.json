@@ -24,6 +24,16 @@
       }
     },
     {
+      "label": "clean",
+      "type": "shell",
+      "command": "cmake --build build --target clean",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },    
+    {
       "label": "uf2_down",
       "type": "shell",
       "command": "python3 tools/down.py",
