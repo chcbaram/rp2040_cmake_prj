@@ -34,7 +34,5 @@ bool hwInit(void)
 
   logBoot(false);
 
-
-
   return true;
 }
