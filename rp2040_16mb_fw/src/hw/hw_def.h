@@ -6,7 +6,7 @@
 
 
 #define _DEF_FIRMWATRE_VERSION    "V220702R1"
-#define _DEF_BOARD_NAME           "RP2040_16MB"
+#define _DEF_BOARD_NAME           "RP2040_BOOT"
 
 
 

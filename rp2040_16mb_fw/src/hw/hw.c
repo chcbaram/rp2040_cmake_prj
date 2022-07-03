@@ -9,6 +9,16 @@
 
 
 
+volatile const firm_ver_t boot_ver __attribute__((section(".version"))) = 
+{
+  .magic_number = VERSION_MAGIC_NUMBER,
+  .version_str  = _DEF_FIRMWATRE_VERSION,
+  .name_str     = _DEF_BOARD_NAME,
+};
+
+
+
+
 
 bool hwInit(void)
 {  
@@ -36,6 +46,8 @@ bool hwInit(void)
   logPrintf("\n");
   logPrintf("Reset Mode\t\t: %s\r\n", resetGetBootModeMsg());
   logPrintf("Reset Count\t\t: %d\r\n", resetGetCount());
+  logPrintf("Version Addr\t\t: 0x%X\r\n", (int)&boot_ver);
+
 
   logBoot(false);
 
