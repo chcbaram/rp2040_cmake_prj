@@ -69,7 +69,7 @@ bool hwInit(void)
 
 void hwJumpToFw(void)
 {
-  void (**jump_func)(void) = (void (**)(void))(FLASH_ADDR_FW + 4); // 256 = boot2 영역
+  void (**jump_func)(void) = (void (**)(void))(FLASH_ADDR_FW + 4); 
 
 
   bspDeInit();
