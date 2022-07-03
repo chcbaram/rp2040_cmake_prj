@@ -3,7 +3,7 @@
 
 
 void cliInfo(cli_args_t *args);
-
+void cliBoot(cli_args_t *args);
 
 
 
@@ -13,6 +13,7 @@ void apInit(void)
   cliOpen(_DEF_UART1, 115200);
 
   cliAdd("info", cliInfo);
+  cliAdd("boot", cliBoot);
 }
 
 void apMain(void)
@@ -47,9 +48,38 @@ void cliInfo(cli_args_t *args)
     ret = true;
   }
 
+  if (args->argc == 1 && args->isStr(0, "jump"))
+  {
+    cliPrintf("JumpToFw()\n");
+    delay(50);
+
+    hwJumpToFw();
+    ret = true;
+  }
+
 
   if (ret != true)
   {
     cliPrintf("info flash\n");
+  }
+}
+
+void cliBoot(cli_args_t *args)
+{
+  bool ret = false;
+
+  if (args->argc == 1 && args->isStr(0, "jump"))
+  {
+    cliPrintf("jump to fw\n");
+    delay(50);
+
+    hwJumpToFw();
+    ret = true;
+  }
+
+
+  if (ret != true)
+  {
+    cliPrintf("boot jump\n");
   }
 }

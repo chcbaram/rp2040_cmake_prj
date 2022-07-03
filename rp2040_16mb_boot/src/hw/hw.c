@@ -66,3 +66,18 @@ bool hwInit(void)
 
   return true;
 }
+
+void hwJumpToFw(void)
+{
+  void (**jump_func)(void) = (void (**)(void))(FLASH_ADDR_FW + 4); // 256 = boot2 영역
+
+
+  bspDeInit();
+  __set_MSP(*(uint32_t *)(FLASH_ADDR_FW));
+  scb_hw->vtor = FLASH_ADDR_FW;
+
+
+  resetSetBootMode(RESET_MODE_FW);
+
+  (*jump_func)();
+}

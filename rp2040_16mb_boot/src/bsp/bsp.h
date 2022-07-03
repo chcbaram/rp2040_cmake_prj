@@ -18,11 +18,13 @@
 #include "RP2040.h"
 #include "hardware/clocks.h"
 #include "hardware/flash.h"
+#include "hardware/structs/scb.h"
 #include "pico/stdlib.h"
 #include "pico/platform.h"
 
 
 bool bspInit(void);
+void bspDeInit(void);
 
 void delay(uint32_t time_ms);
 uint32_t millis(void);

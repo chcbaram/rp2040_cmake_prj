@@ -13,6 +13,8 @@ bool bspInit(void)
   
   stdio_init_all();
   
+  __enable_irq();
+  
   return true;
 }
 

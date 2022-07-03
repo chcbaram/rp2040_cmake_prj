@@ -12,7 +12,7 @@ void apInit(void)
 {
   cliOpen(_DEF_UART1, 115200);
 
-  cliAdd("info", cliInfo);
+  cliAdd("info", cliInfo);  
 }
 
 void apMain(void)

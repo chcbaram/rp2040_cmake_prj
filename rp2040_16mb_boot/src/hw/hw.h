@@ -30,6 +30,7 @@
 
 
 bool hwInit(void);
+void hwJumpToFw(void);
 
 #ifdef __cplusplus
 }

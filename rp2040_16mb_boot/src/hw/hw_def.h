@@ -35,7 +35,8 @@
 
 
 #define FLASH_ADDR_TAG              0x10020000
-#define FLASH_ADDR_FW               0x10020400
+#define FLASH_ADDR_FW_BOOT2         0x10020400
+#define FLASH_ADDR_FW               0x10020500
 #define FLASH_ADDR_FW_VER           0x10020800
 
 #define FLASH_ADDR_START            0x10020000
