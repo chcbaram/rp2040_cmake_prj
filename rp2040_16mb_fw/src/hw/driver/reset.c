@@ -33,7 +33,7 @@ typedef struct
 
 
 static void cliReset(cli_args_t *args);
-static uint32_t resetGetBootModeMem(void);
+static uint32_t resetUpdateBootMode(void);
 
 
 static reset_boot_mode_t *p_boot_mode = (reset_boot_mode_t *)RESET_BOOT_RAM_ADDR;
@@ -64,10 +64,10 @@ void resetInit(void)
   p_boot_mode->magic_number = MAGIC_NUMBER;
 
 
-  reset_boot_mode = resetGetBootModeMem();
+  reset_boot_mode = resetUpdateBootMode();
 
   resetSetBootMode(RESET_MODE_FW);
-  
+
   cliAdd("reset", cliReset);
 }
 
@@ -77,7 +77,7 @@ void resetSetBootMode(uint32_t mode)
   p_boot_mode->boot_mode_xor = mode ^ 0xFFFFFFFF;
 }
 
-uint32_t resetGetBootModeMem(void)
+uint32_t resetUpdateBootMode(void)
 {
   uint32_t boot_mode;
 
