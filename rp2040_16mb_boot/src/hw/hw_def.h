@@ -6,7 +6,7 @@
 
 
 #define _DEF_FIRMWATRE_VERSION    "V220702R1"
-#define _DEF_BOARD_NAME           "RP2040_FIRM"
+#define _DEF_BOARD_NAME           "RP2040_BOOT"
 
 
 
@@ -32,6 +32,14 @@
 #define      HW_LOG_CH              _DEF_UART1
 #define      HW_LOG_BOOT_BUF_MAX    1024
 #define      HW_LOG_LIST_BUF_MAX    1024
+
+
+#define FLASH_ADDR_TAG              0x10020000
+#define FLASH_ADDR_FW               0x10020400
+#define FLASH_ADDR_FW_VER           0x10020800
+
+#define FLASH_ADDR_START            0x10020000
+#define FLASH_ADDR_END              (FLASH_ADDR_START + (2048-128)*1024)
 
 
 

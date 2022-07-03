@@ -1,4 +1,4 @@
-# rp2040_fw
+# rp2040_boot
 ---
 ## 준비
 sudo python3 -m pip install pyserial
