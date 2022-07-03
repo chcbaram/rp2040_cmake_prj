@@ -33,9 +33,12 @@ typedef struct
 
 
 static void cliReset(cli_args_t *args);
+static uint32_t resetGetBootModeMem(void);
+
 
 static reset_boot_mode_t *p_boot_mode = (reset_boot_mode_t *)RESET_BOOT_RAM_ADDR;
 static uint32_t run_timeout_count = 0;
+static uint32_t reset_boot_mode = RESET_MODE_FW;
 
 
 void resetISR(void)
@@ -60,6 +63,11 @@ void resetInit(void)
 {
   p_boot_mode->magic_number = MAGIC_NUMBER;
 
+
+  reset_boot_mode = resetGetBootModeMem();
+
+  resetSetBootMode(RESET_MODE_FW);
+  
   cliAdd("reset", cliReset);
 }
 
@@ -69,7 +77,7 @@ void resetSetBootMode(uint32_t mode)
   p_boot_mode->boot_mode_xor = mode ^ 0xFFFFFFFF;
 }
 
-uint32_t resetGetBootMode(void)
+uint32_t resetGetBootModeMem(void)
 {
   uint32_t boot_mode;
 
@@ -78,10 +86,15 @@ uint32_t resetGetBootMode(void)
   if (p_boot_mode->magic_number == MAGIC_NUMBER && 
       p_boot_mode->boot_mode != boot_mode)
   {
-    resetSetBootMode(0);
+    resetSetBootMode(RESET_MODE_FW);
   }
 
   return p_boot_mode->boot_mode;
+}
+
+uint32_t resetGetBootMode(void)
+{
+  return reset_boot_mode;
 }
 
 void resetToBoot(uint32_t timeout)
@@ -139,7 +152,7 @@ void cliReset(cli_args_t *args)
   {
     cliPrintf("magic         : 0x%X\n", p_boot_mode->magic_number);
     cliPrintf("boot mode     : 0x%X\n", p_boot_mode->boot_mode);
-    cliPrintf("boot mode xor : 0x%X\n", p_boot_mode->boot_mode_xor);
+    cliPrintf("boot mode xor : 0x%X\n", p_boot_mode->boot_mode_xor);    
     cliPrintf("get mode      : %d\n", resetGetBootMode());
     cliPrintf("get mode str  : %s\n", resetGetBootModeMsg());
     ret = true;
