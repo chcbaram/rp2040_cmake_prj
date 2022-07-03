@@ -16,7 +16,7 @@ static const firm_ver_t boot_ver __attribute__((section(".version"))) =
   .name_str     = _DEF_BOARD_NAME,
 };
 
-static const firm_ver_t *p_firm_ver = (firm_ver_t *)FLASH_ADDR_FW;
+static const firm_ver_t *p_firm_ver = (firm_ver_t *)FLASH_ADDR_FW_VER;
 
 
 
