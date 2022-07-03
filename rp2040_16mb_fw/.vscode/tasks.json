@@ -8,10 +8,7 @@
       "type": "shell",
       "command": "cmake -S . -B build -DPICO_BOARD=rp2040_16mb -DPICO_SDK_PATH='~/dev/pico/pico-sdk'",
       "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
+      "group": "build"
     },
     {
       "label": "build",
@@ -32,11 +29,15 @@
         "kind": "build",
         "isDefault": true
       }
-    },    
+    },
     {
       "label": "uf2_down",
       "type": "shell",
       "command": "python3 tools/down.py",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }      
     }
   ]
 }

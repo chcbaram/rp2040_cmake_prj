@@ -4,7 +4,7 @@ import time
 import serial
 
 
-com_port  = "/dev/cu.usbmodem124201"
+com_port  = "/dev/cu.usbmodem124101"
 file_name = "../build/src/rp2040_16mb_fw"
 
 

@@ -1,17 +1,22 @@
+
+file(GLOB SRC_FILES 
+  bsp/*.c
+  hw/*.c
+  hw/driver/*.c
+)
+
+file(GLOB_RECURSE SRC_FILES_RECURSE
+  ap/*.cpp
+  common/*.c 
+)
+
 add_executable(
   ${PRJ_NAME}
   
   main.cpp
 
-  ap/ap.cpp 
-  bsp/bsp.c
-  common/core/qbuffer.c
-  hw/hw.c
-  hw/driver/led.c
-  hw/driver/uart.c
-  hw/driver/cli.c
-  hw/driver/log.c
-  hw/driver/flash.c
+  ${SRC_FILES}
+  ${SRC_FILES_RECURSE}
 )
 
 target_include_directories(${PRJ_NAME} PUBLIC 

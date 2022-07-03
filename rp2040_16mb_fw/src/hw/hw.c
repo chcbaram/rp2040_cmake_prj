@@ -12,9 +12,10 @@
 
 bool hwInit(void)
 {  
-  bspInit();
+  bspInit();  
 
   cliInit();
+  resetInit();
   logInit();
   ledInit();
   uartInit();
@@ -32,7 +33,8 @@ bool hwInit(void)
   logPrintf("Clk adc  \t\t: %d\r\n", clock_get_hz(clk_adc));
   logPrintf("Clk rtc  \t\t: %d\r\n", clock_get_hz(clk_rtc));
   logPrintf("Clk timer\t\t: %d\r\n", clock_get_hz(clk_ref));
-
+  logPrintf("\n");
+  logPrintf("Reset Mode\t\t: %s\r\n", resetGetBootModeMsg());
 
   logBoot(false);
 

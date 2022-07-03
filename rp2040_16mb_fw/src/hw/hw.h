@@ -25,6 +25,8 @@
 #include "i2c.h"
 #include "can.h"
 #include "lcd.h"
+#include "flash.h"
+#include "reset.h"
 
 
 bool hwInit(void);

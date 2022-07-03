@@ -94,6 +94,7 @@
 #endif
 
 
+#define MAGIC_NUMBER            0x5555AAAA
 #define FLASH_MAGIC_NUMBER      0x5555AAAA
 
 #if 0
