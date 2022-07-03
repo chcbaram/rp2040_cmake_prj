@@ -28,6 +28,7 @@ void resetInit(void);
 void resetSetBootMode(uint32_t mode);
 uint32_t resetGetBootMode(void);
 const char *resetGetBootModeMsg(void);
+uint32_t resetGetCount(void);
 
 void resetToBoot(uint32_t timeout);
 void resetToRunBoot(void);

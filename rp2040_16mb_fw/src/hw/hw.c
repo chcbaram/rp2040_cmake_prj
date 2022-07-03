@@ -35,6 +35,7 @@ bool hwInit(void)
   logPrintf("Clk timer\t\t: %d\r\n", clock_get_hz(clk_ref));
   logPrintf("\n");
   logPrintf("Reset Mode\t\t: %s\r\n", resetGetBootModeMsg());
+  logPrintf("Reset Count\t\t: %d\r\n", resetGetCount());
 
   logBoot(false);
 
