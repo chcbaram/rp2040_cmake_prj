@@ -19,7 +19,7 @@
 
 #define RESET_BOOT_RAM_ADDR         0x20000000
 #define BOOT_MSG_STR(x)             #x
-#define RESET_COUNT_DELAY           500
+#define RESET_COUNT_DELAY           300
 
 
 typedef struct

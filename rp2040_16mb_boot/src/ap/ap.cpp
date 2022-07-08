@@ -2,12 +2,14 @@
 #include "boot/boot.h"
 
 
-#ifdef _USE_AP_BOOT
+
+bool is_boot_mode = true;
+
 cmd_t cmd_boot;
-#else
+
 void cliInfo(cli_args_t *args);
 void cliBoot(cli_args_t *args);
-#endif
+
 
 
 
@@ -18,37 +20,68 @@ void cliBoot(cli_args_t *args);
 
 void apInit(void)
 {
-  #ifdef _USE_AP_BOOT
-  cmdInit(&cmd_boot);
-  cmdOpen(&cmd_boot, _DEF_UART1, 115200);
-  #else
-  cliOpen(_DEF_UART1, 115200);
 
-  cliAdd("info", cliInfo);
-  cliAdd("boot", cliBoot);
-  #endif
+  if (resetGetBootMode() == RESET_MODE_FW)
+  {
+    switch(resetGetCount())
+    {
+      case 2:
+        is_boot_mode = true;
+        break;
+
+      case 3:
+        is_boot_mode = false;
+        break;
+
+      default:
+        bootJumpToFw();
+        break;
+    }
+  }
+
+  if (is_boot_mode == true)
+  {
+    cmdInit(&cmd_boot);
+    cmdOpen(&cmd_boot, _DEF_UART1, 115200);
+  }
+  else
+  {
+    cliOpen(_DEF_UART1, 115200);
+
+    cliAdd("info", cliInfo);
+    cliAdd("boot", cliBoot);
+  }
 }
 
 void apMain(void)
 {
   uint32_t pre_time;
+  uint32_t led_time = 100;
+
+  if (is_boot_mode != true)
+  {
+    led_time = 50;
+  }
 
   while(1)
   {
-    if (millis()-pre_time >= 100)
+    if (millis()-pre_time >= led_time)
     {
       pre_time = millis();
       ledToggle(_DEF_LED1);
     }
 
-    #ifdef _USE_AP_BOOT
-    if (cmdReceivePacket(&cmd_boot) == true)
+    if (is_boot_mode == true)
     {
-      bootProcessCmd(&cmd_boot);
+      if (cmdReceivePacket(&cmd_boot) == true)
+      {
+        bootProcessCmd(&cmd_boot);
+      }
     }
-    #else
-    cliMain();
-    #endif
+    else
+    {
+      cliMain();
+    }
   }
 }
 

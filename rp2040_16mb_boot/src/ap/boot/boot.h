@@ -8,7 +8,7 @@
 
 void bootInit(void);
 void bootProcessCmd(cmd_t *p_cmd);
-void bootJumpToFw(void);
+bool bootJumpToFw(void);
 bool bootVerifyFw(void);
 
 

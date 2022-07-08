@@ -69,12 +69,12 @@ void resetISR(void)
 
 void resetInit(void)
 {
+  /*
   p_boot_mode->magic_number = MAGIC_NUMBER;
-
 
   reset_count = resetUpdateCount();
   reset_boot_mode = resetUpdateBootMode();
-
+  */
   resetSetBootMode(RESET_MODE_FW);
 
   cliAdd("reset", cliReset);

@@ -363,6 +363,16 @@ void bootCmdTagErase(cmd_t *p_cmd)
   cmdSendResp(p_cmd, resp_cmd, err_code, NULL, 0);  
 }
 
+bool bootJumpToFw(void)
+{  
+  if (bootVerifyFw() == true)
+  {
+    jumpToFw();
+  }
+
+  return false;
+}
+
 bool bootVerifyFw(void)
 {
   bool ret = false;
