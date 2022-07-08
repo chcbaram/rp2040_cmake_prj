@@ -44,3 +44,4 @@ pico_lcd/build/
 pico_oled/build/
 rp2040_16mb_fw/.vscode/dryrun.log
 rp2040_16mb_fw/.vscode/targets.log
+rp2040_16mb_fw/build/

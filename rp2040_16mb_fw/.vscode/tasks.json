@@ -4,9 +4,16 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "configure",
+      "label": "configure macOS",
       "type": "shell",
       "command": "cmake -S . -B build -DPICO_BOARD=rp2040_16mb -DPICO_SDK_PATH='~/dev/pico/pico-sdk'",
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "configure windows",
+      "type": "shell",
+      "command": "cmake -S . -B build -DPICO_BOARD=rp2040_16mb -G 'MinGW Makefiles' -DPICO_SDK_PATH='D:/develop/pico/pico-sdk'",
       "problemMatcher": [],
       "group": "build"
     },
@@ -42,7 +49,7 @@
     {
       "label": "down Windows",
       "type": "shell",
-      "command": "./tools/mac/rp2040_loader.exe -p /dev/cu.usbmodem124101 -f build/src/rp2040_16mb_fw.bin -r",
+      "command": "./tools/windows/rp2040_loader.exe -p com15 -f build/src/rp2040_16mb_fw.bin -r",
       "group": {
         "kind": "build",
         "isDefault": true
