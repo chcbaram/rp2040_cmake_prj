@@ -1,19 +1,32 @@
 #include "ap.h"
+#include "boot/boot.h"
 
 
-
+#ifdef _USE_AP_BOOT
+cmd_t cmd_boot;
+#else
 void cliInfo(cli_args_t *args);
 void cliBoot(cli_args_t *args);
+#endif
+
+
+
+
 
 
 
 
 void apInit(void)
 {
+  #ifdef _USE_AP_BOOT
+  cmdInit(&cmd_boot);
+  cmdOpen(&cmd_boot, _DEF_UART1, 115200);
+  #else
   cliOpen(_DEF_UART1, 115200);
 
   cliAdd("info", cliInfo);
   cliAdd("boot", cliBoot);
+  #endif
 }
 
 void apMain(void)
@@ -28,7 +41,14 @@ void apMain(void)
       ledToggle(_DEF_LED1);
     }
 
+    #ifdef _USE_AP_BOOT
+    if (cmdReceivePacket(&cmd_boot) == true)
+    {
+      bootProcessCmd(&cmd_boot);
+    }
+    #else
     cliMain();
+    #endif
   }
 }
 
@@ -53,7 +73,7 @@ void cliInfo(cli_args_t *args)
     cliPrintf("JumpToFw()\n");
     delay(50);
 
-    hwJumpToFw();
+    jumpToFw();
     ret = true;
   }
 
@@ -73,7 +93,7 @@ void cliBoot(cli_args_t *args)
     cliPrintf("jump to fw\n");
     delay(50);
 
-    hwJumpToFw();
+    jumpToFw();
     ret = true;
   }
 

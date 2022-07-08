@@ -11,5 +11,7 @@
 #include "hw.h"
 
 
+#define _USE_AP_BOOT
+
 
 #endif /* SRC_AP_AP_DEF_H_ */

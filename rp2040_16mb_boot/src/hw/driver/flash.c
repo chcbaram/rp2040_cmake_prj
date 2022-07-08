@@ -48,6 +48,20 @@ bool flashInit(void)
   return true;
 }
 
+bool flashInRange(uint32_t addr_begin, uint32_t length)
+{
+  bool ret = false;
+
+  for (int i=0; i<FLASH_SECTOR_MAX; i++)
+  {
+    if (flashInSector(i, addr_begin, length) == true)
+    {
+      ret = true;
+    }
+  }
+  return ret;
+}
+
 bool flashErase(uint32_t addr, uint32_t length)
 {
   bool ret = false;  

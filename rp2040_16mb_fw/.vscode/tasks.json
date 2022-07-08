@@ -31,13 +31,22 @@
       }
     },
     {
-      "label": "uf2_down",
+      "label": "down macOS",
       "type": "shell",
-      "command": "python3 tools/down.py",
+      "command": "./tools/mac/rp2040_loader -p /dev/cu.usbmodem124101 -f build/src/rp2040_16mb_fw.bin -r",
       "group": {
         "kind": "build",
         "isDefault": true
       }      
-    }
+    },
+    {
+      "label": "down Windows",
+      "type": "shell",
+      "command": "./tools/mac/rp2040_loader.exe -p /dev/cu.usbmodem124101 -f build/src/rp2040_16mb_fw.bin -r",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }      
+    }    
   ]
 }

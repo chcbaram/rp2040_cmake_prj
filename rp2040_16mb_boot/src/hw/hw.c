@@ -67,7 +67,7 @@ bool hwInit(void)
   return true;
 }
 
-void hwJumpToFw(void)
+void jumpToFw(void)
 {
   void (**jump_func)(void) = (void (**)(void))(FLASH_ADDR_FW + 4); 
 

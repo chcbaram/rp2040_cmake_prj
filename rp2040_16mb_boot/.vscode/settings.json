@@ -1,4 +1,11 @@
 {
-  "cmake.configureOnOpen": false,
-  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+  "cmake.configureOnOpen": false,  
+  "files.associations": {
+    "lcd.h": "c",
+    "hw_def.h": "c",
+    "hw.h": "c",
+    "bsp.h": "c",
+    "rp2040.h": "c",
+    "cmd.h": "c"
+  }
 }

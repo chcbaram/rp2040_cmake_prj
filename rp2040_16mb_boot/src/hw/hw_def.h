@@ -33,6 +33,12 @@
 #define      HW_LOG_BOOT_BUF_MAX    1024
 #define      HW_LOG_LIST_BUF_MAX    1024
 
+#define _USE_HW_CMD
+#define      HW_CMD_MAX_DATA_LENGTH (1024+8)
+
+
+#define FLASH_BOOT_ADDR             0x10000000
+#define FLASH_BOOT_SIZE             (128*1024)           
 
 #define FLASH_ADDR_TAG              0x10020000
 #define FLASH_ADDR_FW_BOOT2         0x10020400
